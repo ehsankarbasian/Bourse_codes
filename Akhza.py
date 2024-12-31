@@ -7,6 +7,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 
+from webdriver_manager.firefox import GeckoDriverManager
+
 all_active_akhza = []
 COLUMN_HEADERS = 'benefit_factor | name | deadline_date | deadline_monthes'
 
@@ -74,7 +76,7 @@ class Akhza:
         return ' | '.join(name_items)
 
 
-driver = webdriver.Firefox()
+driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 driver.set_window_position(x=1450, y=150)
 driver.get('http://tsetmc.ir')
 driver.maximize_window()
