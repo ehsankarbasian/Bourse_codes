@@ -39,7 +39,7 @@ class Akhza:
     
 
     @property
-    def __deadline_days(self):
+    def deadline_days(self):
         now = jdatetime.date.today()
         delta = self.pay_date - now
         return delta.days
@@ -47,7 +47,7 @@ class Akhza:
     
     @property
     def is_expired(self):
-        return self.__deadline_days <= 0
+        return self.deadline_days <= 0
     
 
     @property
@@ -58,7 +58,7 @@ class Akhza:
 
     @property
     def annualized_benefit_percent(self):
-        annualized_factor = (self.__benefit_factor_after_fee)**(365/self.__deadline_days)
+        annualized_factor = (self.__benefit_factor_after_fee)**(365/self.deadline_days)
         annualized_percent = (annualized_factor-1)*100
         return annualized_percent
 
@@ -72,12 +72,17 @@ class Akhza:
         return percent
 
 
-    def __str__(self):
+    def __str__(self, deadline_by_day=False):
+        monthes = str(self.deadline_days//30)
         name_items = [8*' ' + self.__normalize_percent(self.annualized_benefit_percent) + '%',
                       self.name.split('-')[0].replace('اخزا', '').replace(' ', '') + ' ',
                       ' ' + str(self.pay_date).replace('-', '/') + '  ',
-                      str(self.__deadline_days//30)]
-        return ' | '.join(name_items)
+                      str(monthes)]
+        preview = ' | '.join(name_items)
+        if deadline_by_day:
+            s = (4-len(str(self.deadline_days))) * ' '
+            preview += (4-len(monthes))*' ' + f'| {self.deadline_days}{s} days'
+        return preview
 
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
@@ -167,14 +172,29 @@ while '(نماد قدیمی حذف شده)' not in current_akhza_span_text:
 driver.close()
 
 
+def get_akhza_deadline_days(akhza):
+    return akhza.deadline_days
+
 def get_akhza_annualized_benefit(akhza):
     return akhza.annualized_benefit_percent
 
-all_active_akhza.sort(key=get_akhza_annualized_benefit)
-
-print_headers('Sorted by benefit all active akhza:')
+all_active_akhza.sort(key=get_akhza_deadline_days)
+output_file = open('results/Akhza/sorted_by_deadline.txt', "w")
+output_file.write(COLUMN_HEADERS + '\n')
 for akhza in all_active_akhza:
-    print(akhza)
+    output_file.write(akhza.__str__(deadline_by_day=True) + '\n')
+output_file.write(COLUMN_HEADERS)
+output_file.close()
+
+all_active_akhza.sort(key=get_akhza_annualized_benefit, reverse=True)
+output_file = open('results/Akhza/sorted_by_benefit.txt', "w")
+output_file.write(COLUMN_HEADERS + '\n')
+for akhza in all_active_akhza:
+    output_file.write(akhza.__str__() + '\n')
+output_file.write(COLUMN_HEADERS)
+output_file.close()
+
+print('\nSorted results has been written in the folder: "results/Akhza"')
 
 print_headers('The best akhza for today:')
 print(all_active_akhza[-1])
