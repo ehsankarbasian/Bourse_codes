@@ -14,11 +14,15 @@ COLUMN_HEADERS = 'benefit_factor | name | deadline_date | deadline_monthes'
 
 
 class Akhza:
-    DEADLINE_PRICE = 10**6
+    __FEE_FACTOR = 0.000725
+    __DEADLINE_PRICE = 10**6
+    DEADLINE_PRICE_AFTER_FEE = (1 - __FEE_FACTOR) * __DEADLINE_PRICE
+    # DEADLINE_PRICE is normalized with the transaction fee factor
 
     def __init__(self, name, price):
         self.name = name
-        self.current_price = price
+        self.__current_price = price
+        self.current_price_after_fee = (1 + self.__FEE_FACTOR) * self.__current_price
         date_digits = name.split('-')[-1]
         self.pay_date = self.__gat_date_from_digits(date_digits)
     
@@ -47,14 +51,14 @@ class Akhza:
     
 
     @property
-    def __benefit_factor(self):
-        return self.DEADLINE_PRICE / self.current_price
-
+    def __benefit_factor_after_fee(self):
+        # before_fee = self.__DEADLINE_PRICE / self.__current_price
+        return self.DEADLINE_PRICE_AFTER_FEE / self.current_price_after_fee
+    
 
     @property
     def annualized_benefit_percent(self):
-        # TODO: Calculate trade fee
-        annualized_factor = self.__benefit_factor**(365/self.__deadline_days)
+        annualized_factor = (self.__benefit_factor_after_fee)**(365/self.__deadline_days)
         annualized_percent = (annualized_factor-1)*100
         return annualized_percent
 
@@ -127,13 +131,15 @@ def get_price(driver):
         return price
     except TimeoutException:
         print("Loading took too much time!")
-        return Akhza.DEADLINE_PRICE
+        return Akhza.DEADLINE_PRICE_AFTER_FEE
 
 
 current_akhza_div_id = 1
 current_akhza = get_next_akhza_link(current_akhza_div_id)
 current_akhza_span_text = get_next_akhza_span(current_akhza_div_id).text
 
+print()
+print(80*'_')
 print(COLUMN_HEADERS)
 while '(نماد قدیمی حذف شده)' not in current_akhza_span_text:
     current_akhza.click()
@@ -144,7 +150,7 @@ while '(نماد قدیمی حذف شده)' not in current_akhza_span_text:
     driver.switch_to.window(driver.window_handles[0])
     
     akhza = Akhza(name, price)
-    if price < Akhza.DEADLINE_PRICE and not akhza.is_expired:
+    if price < Akhza.DEADLINE_PRICE_AFTER_FEE and not akhza.is_expired:
         print(akhza)
         all_active_akhza.append(akhza)
     
