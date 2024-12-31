@@ -134,13 +134,19 @@ def get_price(driver):
         return Akhza.DEADLINE_PRICE_AFTER_FEE
 
 
+def print_headers(subject=None):
+    print()
+    print(80*'_')
+    if subject:
+        print(subject)
+    print(COLUMN_HEADERS)
+
+
 current_akhza_div_id = 1
 current_akhza = get_next_akhza_link(current_akhza_div_id)
 current_akhza_span_text = get_next_akhza_span(current_akhza_div_id).text
 
-print()
-print(80*'_')
-print(COLUMN_HEADERS)
+print_headers()
 while '(نماد قدیمی حذف شده)' not in current_akhza_span_text:
     current_akhza.click()
     name = current_akhza.text
@@ -166,13 +172,9 @@ def get_akhza_annualized_benefit(akhza):
 
 all_active_akhza.sort(key=get_akhza_annualized_benefit)
 
-print(80*'_')
-print('Sorted by benefit all active akhza:')
-print(COLUMN_HEADERS)
+print_headers('Sorted by benefit all active akhza:')
 for akhza in all_active_akhza:
     print(akhza)
 
-print(80*'_')
-print('The best akhza for today:')
-print(COLUMN_HEADERS)
+print_headers('The best akhza for today:')
 print(all_active_akhza[-1])
