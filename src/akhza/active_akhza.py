@@ -17,7 +17,6 @@ from src.akhza.akhza import Akhza
 
 
 all_active_akhza = []
-COLUMN_HEADERS = 'benefit_factor | name | deadline_date | deadline_monthes'
 
 
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
@@ -79,7 +78,7 @@ def print_headers(subject=None):
     print(80*'_')
     if subject:
         print(subject)
-    print(COLUMN_HEADERS)
+    print(Akhza.COLUMN_HEADERS)
 
 
 current_akhza_div_id = 1
@@ -115,18 +114,18 @@ def get_akhza_annualized_benefit(akhza):
 
 all_active_akhza.sort(key=get_akhza_deadline_days)
 output_file = open('results/Akhza/sorted_by_deadline.txt', "w")
-output_file.write(COLUMN_HEADERS + '\n')
+output_file.write(Akhza.COLUMN_HEADERS + '\n')
 for akhza in all_active_akhza:
     output_file.write(akhza.__str__(deadline_by_day=True) + '\n')
-output_file.write(COLUMN_HEADERS)
+output_file.write(Akhza.COLUMN_HEADERS)
 output_file.close()
 
 all_active_akhza.sort(key=get_akhza_annualized_benefit, reverse=True)
 output_file = open('results/Akhza/sorted_by_benefit.txt', "w")
-output_file.write(COLUMN_HEADERS + '\n')
+output_file.write(Akhza.COLUMN_HEADERS + '\n')
 for akhza in all_active_akhza:
     output_file.write(akhza.__str__() + '\n')
-output_file.write(COLUMN_HEADERS)
+output_file.write(Akhza.COLUMN_HEADERS)
 output_file.close()
 
 print('\nSorted results has been written in the folder: "results/Akhza"')

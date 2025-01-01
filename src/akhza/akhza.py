@@ -6,13 +6,16 @@ class Akhza:
     __DEADLINE_PRICE = 10**6
     DEADLINE_PRICE_AFTER_FEE = (1 - __FEE_FACTOR) * __DEADLINE_PRICE
     # DEADLINE_PRICE is normalized with the transaction fee factor
+    
+    COLUMN_HEADERS = 'benefit_factor | name | deadline_date | deadline_monthes'
 
-    def __init__(self, name, price):
+    def __init__(self, name, price, base_symbol='اخزا'):
         self.name = name
         self.__current_price = price
         self.current_price_after_fee = (1 + self.__FEE_FACTOR) * self.__current_price
         date_digits = name.split('-')[-1]
         self.pay_date = self.__gat_date_from_digits(date_digits)
+        self.base_symbol = base_symbol
     
     
     @staticmethod
