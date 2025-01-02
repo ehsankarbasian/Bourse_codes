@@ -4,6 +4,7 @@ import jdatetime
 class Akhza:
     __FEE_FACTOR = 0.000725
     __DEADLINE_PRICE = 10**6
+    # TODO: اگر موقع نقد شدن به قیمت اسمی کارمزد ندارد کارمزد حساب نکن
     DEADLINE_PRICE_AFTER_FEE = (1 - __FEE_FACTOR) * __DEADLINE_PRICE
     # DEADLINE_PRICE is normalized with the transaction fee factor
     

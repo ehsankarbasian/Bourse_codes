@@ -18,6 +18,10 @@ class _Candle:
     @staticmethod
     def __validate_low_is_smallest(first, close, high, low):
         return min([first, close, high, low]) == low
+    
+    @property
+    def mean_price(self):
+        return (self.open + self.close + self.high + self.low) / 4
 
 
 class Chart:
@@ -31,3 +35,27 @@ class Chart:
         candle = _Candle(first, close, high, low, date)
         if candle.is_valid:
             self.__candles.append(candle)
+    
+    @property
+    def __duration(self):
+        first_candle = self.__candles[0]
+        last_candle = self.__candles[-1]
+        days = last_candle.date - first_candle.date
+        return days
+    
+    
+    @property
+    def annualized_benefit(self):
+        FEE_FACTOR = 0.000725
+        DEADLINE_PRICE =  10**6
+        
+        first_price = self.__candles[0].mean_price
+        first_price += FEE_FACTOR * first_price
+        # TODO: اگر موقع نقد شدن به قیمت اسمی کارمزد ندارد کارمزد حساب نکن
+        last_price = (1-FEE_FACTOR) * DEADLINE_PRICE
+        
+        benefit_factor = first_price / last_price
+        annualized_factor = benefit_factor ** (365/self.__duration)
+        annualized_percent = (annualized_factor-1)*100
+        
+        return annualized_percent
