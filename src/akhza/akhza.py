@@ -1,5 +1,12 @@
 import jdatetime
 
+import pathlib
+import sys
+path = str(pathlib.Path(__file__).parent.parent.parent.absolute())
+sys.path.append(path)
+
+from src.utils.normalizer import normalize_percent
+
 
 class Akhza:
     __FEE_FACTOR = 0.000725
@@ -55,18 +62,9 @@ class Akhza:
         return annualized_percent
 
 
-    @staticmethod
-    def __normalize_percent(percent):
-        percent *= 100
-        percent = int(percent)
-        percent = str(percent)
-        percent = percent[:2] + '.' + percent[2:]
-        return percent
-
-
     def __str__(self, deadline_by_day=False):
         monthes = str(self.deadline_days//30)
-        name_items = [8*' ' + self.__normalize_percent(self.annualized_benefit_percent) + '%',
+        name_items = [8*' ' + normalize_percent(self.annualized_benefit_percent) + '%',
                       self.name.split('-')[0].replace('اخزا', '').replace(' ', '') + ' ',
                       ' ' + str(self.pay_date).replace('-', '/') + '  ',
                       str(monthes)]
