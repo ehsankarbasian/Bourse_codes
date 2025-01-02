@@ -30,10 +30,16 @@ def initialize_chart(file_name):
     return chart
 
 
+def get_chart_benefit(chart):
+    return chart.annualized_benefit_percent
+
+
 expired_akhza_files = listdir(ARCHIVE_DIR)
 for file_name in expired_akhza_files:
     chart = initialize_chart(file_name)
     charts.append(chart)
     
-    annualized_benefit_percent = chart.annualized_benefit
-    print(normalize_percent(annualized_benefit_percent), '%')
+charts.sort(key=get_chart_benefit)
+for chart in charts:
+    annualized_benefit_percent = chart.annualized_benefit_percent
+    print(normalize_percent(annualized_benefit_percent), '%', '|', chart.file_name)

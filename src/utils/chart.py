@@ -50,7 +50,7 @@ class _Candle:
 class Chart:
     
     def __init__(self, name, symbol=None):
-        self.name = name
+        self.file_name = name
         self.symbol = symbol
         self.__candles = []
     
@@ -68,7 +68,7 @@ class Chart:
     
     
     @property
-    def annualized_benefit(self):
+    def annualized_benefit_percent(self):
         FEE_FACTOR = 0.000725
         
         first_price = self.__candles[0].mean_price

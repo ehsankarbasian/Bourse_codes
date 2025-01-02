@@ -1,11 +1,7 @@
 import time
-import jdatetime
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support import expected_conditions as EC
 
 from webdriver_manager.firefox import GeckoDriverManager
 
@@ -17,6 +13,7 @@ sys.path.append(path)
 from src.config import AGAH_USERNAME, AGAH_PASSWORD
 
 
+# years = 8
 years = 7
 
 ALL = []
@@ -87,10 +84,11 @@ def get_all():
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 driver.set_window_position(x=1450, y=150)
 driver.get('https://online.agah.com/')
+driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[3]/tse-captcha/div/div[2]/button[2]').click()
 driver.maximize_window()
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[1]/input').send_keys(AGAH_USERNAME)
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[2]/input').send_keys(AGAH_PASSWORD)
-captcha = input('Enter captcha: ')
+captcha = input('\nEnter captcha: ')
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[3]/tse-captcha/div/input').send_keys(captcha)
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/div[2]/button').click()
 time.sleep(3)
@@ -111,9 +109,3 @@ get_all()
 
 
 print('END')
-
-
-# driver.find_element(by=By.XPATH, value='').click()
-
-
-
