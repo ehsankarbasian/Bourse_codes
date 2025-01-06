@@ -8,6 +8,8 @@ class Address:
     AKHZA_ACTIVE_LIST = 'results/Akhza/active_akhza_list.txt'
     AKHZA_SORTED_BENEFIT = 'results/Akhza/sorted_by_benefit.txt'
     AKHZA_SORTED_DEADLINE = 'results/Akhza/sorted_by_deadline.txt'
+    
+    FINPY_TSE_RESULTS = 'results/finpy_tse/'
 
 
 # INACTIVE and AKCIVE Akhza lists
