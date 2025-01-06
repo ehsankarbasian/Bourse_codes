@@ -14,6 +14,7 @@ path = str(pathlib.Path(__file__).parent.parent.parent.absolute())
 sys.path.append(path)
 
 from src.akhza.akhza import Akhza
+from settings import Address
 
 
 all_active_akhza = []
@@ -113,20 +114,22 @@ def get_akhza_annualized_benefit(akhza):
     return akhza.annualized_benefit_percent
 
 all_active_akhza.sort(key=get_akhza_deadline_days)
-output_file = open('results/Akhza/sorted_by_deadline.txt', "w")
-output_file.write(Akhza.COLUMN_HEADERS + '\n')
-for akhza in all_active_akhza:
-    output_file.write(akhza.__str__(deadline_by_day=True) + '\n')
-output_file.write(Akhza.COLUMN_HEADERS)
-output_file.close()
+with open(Address.AKHZA_SORTED_DEADLINE, "w") as output_file:
+    output_file.write(Akhza.COLUMN_HEADERS + '\n')
+    for akhza in all_active_akhza:
+        output_file.write(akhza.__str__(deadline_by_day=True) + '\n')
+    output_file.write(Akhza.COLUMN_HEADERS)
 
 all_active_akhza.sort(key=get_akhza_annualized_benefit, reverse=True)
-output_file = open('results/Akhza/sorted_by_benefit.txt', "w")
-output_file.write(Akhza.COLUMN_HEADERS + '\n')
-for akhza in all_active_akhza:
-    output_file.write(akhza.__str__() + '\n')
-output_file.write(Akhza.COLUMN_HEADERS)
-output_file.close()
+with open(Address.AKHZA_SORTED_BENEFIT, "w") as output_file:
+    output_file.write(Akhza.COLUMN_HEADERS + '\n')
+    for akhza in all_active_akhza:
+        output_file.write(akhza.__str__() + '\n')
+    output_file.write(Akhza.COLUMN_HEADERS)
+
+with open(Address.AKHZA_ACTIVE_LIST, "w") as akhza_list_file:
+    for akhza in all_active_akhza:
+        akhza_list_file.write(akhza.symbol + '\n')
 
 print('\nSorted results has been written in the folder: "results/Akhza"')
 

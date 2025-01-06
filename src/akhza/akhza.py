@@ -19,11 +19,14 @@ class Akhza:
 
     def __init__(self, name, price, base_symbol='اخزا'):
         self.name = name
+        self.name_number = name.split('-')[0].replace('اخزا', '').replace(' ', '')
+        self.base_symbol = base_symbol
+        self.symbol = base_symbol + ' ' + self.name_number
+        
         self.__current_price = price
         self.current_price_after_fee = (1 + self.__FEE_FACTOR) * self.__current_price
         date_digits = name.split('-')[-1]
         self.pay_date = self.__gat_date_from_digits(date_digits)
-        self.base_symbol = base_symbol
     
     
     @staticmethod
@@ -65,7 +68,7 @@ class Akhza:
     def __str__(self, deadline_by_day=False):
         monthes = str(self.deadline_days//30)
         name_items = [8*' ' + normalize_percent(self.annualized_benefit_percent) + '%',
-                      self.name.split('-')[0].replace('اخزا', '').replace(' ', '') + ' ',
+                      self.name_number + ' ',
                       ' ' + str(self.pay_date).replace('-', '/') + '  ',
                       str(monthes)]
         preview = ' | '.join(name_items)

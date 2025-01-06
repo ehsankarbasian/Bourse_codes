@@ -8,15 +8,15 @@ sys.path.append(path)
 
 from src.utils.chart import Chart
 from src.utils.normalizer import normalize_percent
+from settings import ARCHIVE_DATA_DIR
 
 
-ARCHIVE_DIR = 'data/expired_akhza'
 charts = []
 
 
 def initialize_chart(file_name):
     chart = Chart(name=file_name)
-    with open(ARCHIVE_DIR + '/' + file_name, newline='') as csvfile:
+    with open(ARCHIVE_DATA_DIR + '/' + file_name, newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             date = row[1]
@@ -34,7 +34,7 @@ def get_chart_benefit(chart):
     return chart.annualized_benefit_percent
 
 
-expired_akhza_files = listdir(ARCHIVE_DIR)
+expired_akhza_files = listdir(ARCHIVE_DATA_DIR)
 for file_name in expired_akhza_files:
     chart = initialize_chart(file_name)
     charts.append(chart)
