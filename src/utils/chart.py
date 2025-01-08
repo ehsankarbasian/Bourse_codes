@@ -93,3 +93,21 @@ class Chart:
         annualized_percent = (annualized_factor-1)*100
         
         return annualized_percent
+
+
+class ChartToPredict(Chart):
+    
+    def __init__(self, name, deadline_days, deadline_price, symbol=None):
+        super().__init__(name, symbol)
+        self.deadline_days = deadline_days
+        self.deadline_price = deadline_price
+    
+    @property
+    def tomorrow_price_prediction(self):
+        last_candle = self._Chart__candles[-1]
+        last_ohlc4 = (last_candle.close + last_candle.open + last_candle.low + last_candle.high) / 4
+        increase_factor = self.deadline_price / last_ohlc4
+        annualized_increase_factor = increase_factor ** (365/self.deadline_days)
+        daily_increase_factor = annualized_increase_factor ** (1/365)
+        tomorrow_price = daily_increase_factor * last_ohlc4
+        return tomorrow_price

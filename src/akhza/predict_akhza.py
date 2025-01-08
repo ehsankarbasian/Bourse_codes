@@ -1,6 +1,7 @@
 import finpy_tse as fpy
-import pandas as pd
 import jdatetime
+
+from pandas import read_excel
 
 import pathlib
 import sys
@@ -8,7 +9,7 @@ path = str(pathlib.Path(__file__).parent.parent.parent.absolute())
 sys.path.append(path)
 
 from src.akhza.akhza import Akhza
-from src.utils.chart import Chart
+from src.utils.chart import ChartToPredict
 from settings import ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADLINE_DAYS, Address
 
 
@@ -32,12 +33,13 @@ def gat_date_from_digits(digits):
 all_charts = []
 
 for akhza_name, akhza_deadline_days in zip(ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADLINE_DAYS):
-    akhza_df = pd.read_excel(f'{Address.FINPY_TSE_RESULTS}/{akhza_name}.xlsx')
+    akhza_df = read_excel(f'{Address.FINPY_TSE_RESULTS}/{akhza_name}.xlsx')
     print(akhza_name, ' --- ', akhza_deadline_days)
     columns = akhza_df.columns
     
-    chart = Chart(name=akhza_name, symbol=akhza_name)
-    chart.__setattr__('deadline_days', akhza_deadline_days)
+    chart = ChartToPredict(name=akhza_name,
+                           deadline_days=akhza_deadline_days,
+                           deadline_price=Akhza.DEADLINE_PRICE_AFTER_FEE)
     for index, row in akhza_df.iterrows():
         chart.add_candle(first=row['Open'],
                          close=row['Close'],
@@ -48,4 +50,4 @@ for akhza_name, akhza_deadline_days in zip(ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADL
     all_charts.append(chart)
 
 
-print(all_charts[0].deadline_days)
+print(all_charts[0].tomorrow_price_prediction)
