@@ -1,9 +1,9 @@
-import datetime
+import jdatetime, datetime
 
 
 class _Candle:
     
-    def __init__(self, first, close, high, low, date):
+    def __init__(self, first, close, high, low, date, date_type='jdatetime'):
         try:
             first = int(first.split('.')[0])
             close = int(close.split('.')[0])
@@ -17,16 +17,27 @@ class _Candle:
         self.is_valid = validate_high and validate_low
         
         if self.is_valid:
-            year = int(date[:4])
-            month = date[4:6]
-            day = date[6:]
-            if month[0] == '0':
-                month = month.replace('0', '')
-            if day[0] == '0':
-                day = day.replace('0', '')
-            month = int(month)
-            day = int(day)
-            date = datetime.date(year, month, day)
+            if date_type == 'jdatetime':
+                year, month, day = date.split('-')
+                if month[0] == '0':
+                    month = month.replace('0', '')
+                if day[0] == '0':
+                    day = day.replace('0', '')
+                year = int(year)
+                month = int(month)
+                day = int(day)
+                date = jdatetime.date(year, month, day)
+            else:
+                year = int(date[:4])
+                month = date[4:6]
+                day = date[6:]
+                if month[0] == '0':
+                    month = month.replace('0', '')
+                if day[0] == '0':
+                    day = day.replace('0', '')
+                month = int(month)
+                day = int(day)
+                date = datetime.date(year, month, day)
         
         self.open = first #open
         self.close = close

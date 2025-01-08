@@ -21,7 +21,7 @@ class Akhza:
         self.name = name
         self.name_number = name.split('-')[0].replace('اخزا', '').replace(' ', '')
         self.base_symbol = base_symbol
-        self.symbol = base_symbol + ' ' + self.name_number
+        self.symbol = base_symbol + self.name_number
         
         self.__current_price = price
         self.current_price_after_fee = (1 + self.__FEE_FACTOR) * self.__current_price

@@ -9,12 +9,15 @@ class Address:
     AKHZA_SORTED_BENEFIT = 'results/Akhza/sorted_by_benefit.txt'
     AKHZA_SORTED_DEADLINE = 'results/Akhza/sorted_by_deadline.txt'
     
-    FINPY_TSE_RESULTS = 'results/finpy_tse/'
+    FINPY_TSE_RESULTS = 'results/finpy_tse'
 
 
 # INACTIVE and AKCIVE Akhza lists
 INACTIVE_AKHZA_LIST = []
 ACTIVE_AKHZA_LIST = []
+ACTIVE_AKHZA_DEADLINE_DAYS = []
 with open(Address.AKHZA_ACTIVE_LIST) as active_akhza:
     for line in active_akhza.readlines():
-        ACTIVE_AKHZA_LIST.append(line.replace('\n', ''))
+        line = line.replace('\n', '').split('-')
+        ACTIVE_AKHZA_LIST.append(line[0])
+        ACTIVE_AKHZA_DEADLINE_DAYS.append(int(line[1]))
