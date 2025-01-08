@@ -10,31 +10,23 @@ sys.path.append(path)
 
 from src.akhza.akhza import Akhza
 from src.utils.chart import ChartToPredict
-from settings import ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADLINE_DAYS, Address
+from src.utils.directory_tools import make_folder_empty
+from settings import ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADLINE_DAYS, PREDICTOR_DIRECTORY, UPDATE_MODE
 
 
-# fpy.Build_PricePanel(
-#     ACTIVE_AKHZA_LIST,
-#     jalali_date=True,
-#     save_excel=True,
-#     save_path=Address.FINPY_TSE_RESULTS)
-
-
-def gat_date_from_digits(digits):
-    digits = str(digits)
-    year = int('14' + digits[:2])
-    month = int(digits[2:4])
-    day = int(digits[4:])
-    
-    date = jdatetime.date(year, month, day)
-    return date
+if UPDATE_MODE:
+    make_folder_empty(PREDICTOR_DIRECTORY)
+    fpy.Build_PricePanel(
+        ACTIVE_AKHZA_LIST,
+        jalali_date=True,
+        save_excel=True,
+        save_path=PREDICTOR_DIRECTORY)
 
 
 all_charts = []
 
 for akhza_name, akhza_deadline_days in zip(ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADLINE_DAYS):
-    akhza_df = read_excel(f'{Address.FINPY_TSE_RESULTS}/{akhza_name}.xlsx')
-    print(akhza_name, ' --- ', akhza_deadline_days)
+    akhza_df = read_excel(f'{PREDICTOR_DIRECTORY}/{akhza_name}.xlsx')
     columns = akhza_df.columns
     
     chart = ChartToPredict(name=akhza_name,
@@ -48,6 +40,5 @@ for akhza_name, akhza_deadline_days in zip(ACTIVE_AKHZA_LIST, ACTIVE_AKHZA_DEADL
                          date=row['J-Date'])
     
     all_charts.append(chart)
-
-
-print(all_charts[0].tomorrow_price_prediction)
+    print(chart.name)
+    print(chart.tomorrow_price_prediction)

@@ -1,4 +1,8 @@
 
+#
+UPDATE_MODE = False
+
+
 # Excel data archive
 ARCHIVE_DATA_DIR = 'data/expired_akhza'
 
@@ -10,6 +14,8 @@ class Address:
     AKHZA_SORTED_DEADLINE = 'results/Akhza/sorted_by_deadline.txt'
     
     FINPY_TSE_RESULTS = 'results/finpy_tse'
+
+PREDICTOR_DIRECTORY = f'{Address.FINPY_TSE_RESULTS}/predictor'
 
 
 # INACTIVE and AKCIVE Akhza lists

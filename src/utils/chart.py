@@ -61,14 +61,15 @@ class _Candle:
 class Chart:
     
     def __init__(self, name, symbol=None):
-        self.file_name = name
+        self.name = name
         self.symbol = symbol
         self.__candles = []
     
     def add_candle(self, first, close, high, low, date):
         candle = _Candle(first, close, high, low, date)
         if candle.is_valid:
-            self.__candles = [candle] + self.__candles
+            # self.__candles = [candle] + self.__candles
+            self.__candles.append(candle)
     
     @property
     def __duration(self):
