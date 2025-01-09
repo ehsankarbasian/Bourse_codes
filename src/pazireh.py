@@ -10,7 +10,7 @@ import sys
 path = str(pathlib.Path(__file__).parent.parent.absolute())
 sys.path.append(path)
 
-from src.config import AGAH_USERNAME, AGAH_PASSWORD
+from src.utils.logins import agah_login
 
 
 # years = 8
@@ -84,13 +84,8 @@ def get_all():
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
 driver.set_window_position(x=1450, y=150)
 driver.get('https://online.agah.com/')
-driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[3]/tse-captcha/div/div[2]/button[2]').click()
 driver.maximize_window()
-driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[1]/input').send_keys(AGAH_USERNAME)
-driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[2]/input').send_keys(AGAH_PASSWORD)
-captcha = input('\nEnter captcha: ')
-driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/label[3]/tse-captcha/div/input').send_keys(captcha)
-driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-login-page/section/div/div[1]/tse-built-in-login/form/div/div[2]/button').click()
+driver = agah_login(driver)
 time.sleep(3)
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-main-area/tse-global/section/div/tse-widget-bar/div/div[1]/span[2]').click()
 driver.find_element(by=By.XPATH, value='/html/body/tse-root/div/tse-main-area/tse-global/section/div/tse-widget-bar/div/div[2]/h2/div/button[2]').click()

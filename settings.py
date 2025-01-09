@@ -9,7 +9,8 @@ ARCHIVE_DATA_DIR = 'data/expired_akhza'
 
 # File addresses
 class Address:
-    AKHZA_ACTIVE_URLS = 'results/Akhza/active_akhza_urls.txt'
+    AKHZA_ACTIVE_TSETMC_URLS = 'results/Akhza/active_akhza_tsetmc_urls.txt'
+    AKHZA_ACTIVE_URLS_CHART_AGAH = 'results/Akhza/active_akhza_urls_chart_agah.txt'
     AKHZA_ACTIVE_LIST = 'results/Akhza/active_akhza_list.txt'
     AKHZA_SORTED_BENEFIT = 'results/Akhza/sorted_by_benefit.txt'
     AKHZA_SORTED_DEADLINE = 'results/Akhza/sorted_by_deadline.txt'
