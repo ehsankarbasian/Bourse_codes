@@ -17,11 +17,12 @@ class Akhza:
     
     COLUMN_HEADERS = 'benefit_factor | name | deadline_date | deadline_monthes'
 
-    def __init__(self, name, price, base_symbol='اخزا'):
+    def __init__(self, name, price, base_symbol='اخزا', url=None):
         self.name = name
         self.name_number = name.split('-')[0].replace('اخزا', '').replace(' ', '')
         self.base_symbol = base_symbol
         self.symbol = base_symbol + self.name_number
+        self.url = url
         
         self.__current_price = price
         self.current_price_after_fee = (1 + self.__FEE_FACTOR) * self.__current_price

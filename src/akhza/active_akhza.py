@@ -92,10 +92,11 @@ while '(نماد قدیمی حذف شده)' not in current_akhza_span_text:
     name = current_akhza.text
     driver.switch_to.window(driver.window_handles[1])
     price = get_price(driver)
+    current_url = driver.current_url
     driver.close()
     driver.switch_to.window(driver.window_handles[0])
     
-    akhza = Akhza(name, price)
+    akhza = Akhza(name, price, url=current_url)
     if price < Akhza.DEADLINE_PRICE_AFTER_FEE and not akhza.is_expired:
         print(akhza)
         all_active_akhza.append(akhza)
@@ -130,6 +131,10 @@ with open(Address.AKHZA_SORTED_BENEFIT, "w") as output_file:
 with open(Address.AKHZA_ACTIVE_LIST, "w") as akhza_list_file:
     for akhza in all_active_akhza:
         akhza_list_file.write(akhza.symbol + '-' + str(akhza.deadline_days) + '\n')
+
+with open(Address.AKHZA_ACTIVE_URLS, "w") as akhza_list_file:
+    for akhza in all_active_akhza:
+        akhza_list_file.write(akhza.url + '\n')
 
 print('\nSorted results has been written in the folder: "results/Akhza"')
 
